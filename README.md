@@ -1,21 +1,16 @@
 # SpeechSynthesisPlugin
 
-W3C Web Speech API - Speech synthesis plugin for Cordova/PhoneGap.
+W3C Web Speech API - Speech synthesis plugin for Cordova.
 
-This Cordova plugin provides speech synthesis support for Android, Apple iOS, Windows 10, and the Browser.
-It attempts to closely follow the [SpeechSynthesis](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis)
-interface as defined by the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API).
+This Cordova plugin provides speech synthesis support for Android, Apple iOS, Windows 10, and the Browser. It attempts to closely follow the [SpeechSynthesis](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) interface as defined by the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API).
 
-This plugin provides a native implementation for Android and iOS. For Windows 10, and Browser, the native webview
-implementation is used.
+This plugin provides a native implementation for Android and iOS. For Windows 10, and Browser, the native webview implementation is used.
 
 # Installation
 
 ## Cordova
 
-To install for use in your Cordova app, first create a file called **.npmrc** at the root level of your Cordova project
-if it does not already exist. Add the following line to this file to specify to NPM and Cordova which registry to
-look in to find the package for this plugin:
+To install for use in your Cordova app, first create a file called **.npmrc** at the root level of your Cordova project if it does not already exist. Add the following line to this file to specify to NPM and Cordova which registry to look in to find the package for this plugin:
 
     @fisherleasystems:registry=https://npm.pkg.github.com
 
@@ -33,8 +28,7 @@ This plugin works with the Apache Cordova toolset. See this Github project for a
 
     https://github.com/andysylvester/talk-to-me-cordova
 
-More info on using this plugin with Cordova is available at
-this [blog post](http://andysylvester.com/2014/02/08/first-steps-with-cordova-talk-to-me).
+More info on using this plugin with Cordova is available at this [blog post](http://andysylvester.com/2014/02/08/first-steps-with-cordova-talk-to-me).
 
 ## Example Code
 
