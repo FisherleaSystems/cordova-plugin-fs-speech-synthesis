@@ -17,7 +17,7 @@ For Windows 10, and Browser, the native webview implementation is used.
 
 Using the command line tools run:
 
-    cordova plugin add https://github.com/wifisher/SpeechSynthesisPlugin
+    cordova plugin add https://github.com/FisherleaSystems/SpeechSynthesisPlugin
 
 # Cordova Usage
 
