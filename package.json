@@ -1,6 +1,6 @@
 {
   "name": "@fisherleasystems/cordova-plugin-fs-speech-synthesis",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "W3C Web Speech API - Speech synthesis plugin for Cordova",
   "homepage": "https://github.com/FisherleaSystems/SpeechSynthesisPlugin#readme",
   "scripts": {
