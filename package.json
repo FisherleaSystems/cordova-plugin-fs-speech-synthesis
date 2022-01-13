@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FisherleaSystems/SpeechSynthesisPlugin.git"
+    "url": "git+https://github.com/FisherleaSystems/SpeechSynthesisPlugin.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/FisherleaSystems"
