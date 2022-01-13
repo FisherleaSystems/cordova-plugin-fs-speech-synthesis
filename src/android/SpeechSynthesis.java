@@ -1,4 +1,4 @@
-package org.apache.cordova.speech;
+package com.fisherlea.cordova.speech;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -88,20 +88,18 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
                 if (mTts == null) {
                     state = SpeechSynthesis.INITIALIZING;
                     mTts = new TextToSpeech(cordova.getActivity().getApplicationContext(), this);
-                }else{
-            		getVoices(callbackContext);
+                } else {
+                    getVoices(callbackContext);
                 }
                 PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
-            }
-            else if (action.equals("shutdown")) {
+            } else if (action.equals("shutdown")) {
                 if (mTts != null) {
                     mTts.shutdown();
                 }
                 callbackContext.sendPluginResult(new PluginResult(status, result));
-            }
-            else if (action.equals("isLanguageAvailable")) {
+            } else if (action.equals("isLanguageAvailable")) {
                 if (mTts != null) {
                     Locale loc = new Locale(args.getString(0));
                     int available = mTts.isLanguageAvailable(loc);
@@ -143,7 +141,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
             for (Voice v : this.voiceList) {
                 if (voiceCode.equals(v.getName())) {
                     mTts.setVoice(v);
-                    //text+=" yay! found the voice!";
+                    // text+=" yay! found the voice!";
                 }
             }
         }
@@ -167,7 +165,8 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
             } else { // android API level is 21 or higher...
                 Bundle params = new Bundle();
                 params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume);
-                mTts.speak(text, flush ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, params, callbackContext.getCallbackId());
+                mTts.speak(text, flush ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, params,
+                        callbackContext.getCallbackId());
             }
         } else {
             fireErrorEvent(callbackContext, 6, "Not ready.");
@@ -177,7 +176,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
     private void getVoices(CallbackContext callbackContext) {
         JSONArray voices = new JSONArray();
         JSONObject voice;
-        //List<TextToSpeech.EngineInfo> engines = mTts.getEngines();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             this.voiceList = mTts.getVoices();
@@ -187,9 +185,9 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
                 try {
                     voice.put("voiceURI", v.getName());
                     voice.put("name", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
-                    //voice.put("features", v.getFeatures());
-                    //voice.put("displayName", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
-                    voice.put("lang", locale.getLanguage()+"-"+locale.getCountry());
+                    // voice.put("features", v.getFeatures());
+                    // voice.put("displayName", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
+                    voice.put("lang", locale.getLanguage() + "-" + locale.getCountry());
                     voice.put("localService", !v.isNetworkConnectionRequired());
                     voice.put("quality", v.getQuality());
                     voice.put("default", false);
@@ -198,22 +196,21 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
                 }
                 voices.put(voice);
             }
-        }else{
-            //Iterator<Locale> list = voiceList.iterator();
+        } else {
             Locale[] list = Locale.getAvailableLocales();
             Locale locale;
-            //while (list.hasNext()) {
-            //    locale = list.next();
             for (int i = 0; i < list.length; i++) {
                 locale = list[i];
                 try {
-                    // PMPA-680: Filter out just English and French since the app doesn't support anything else.
-                    if ((locale.getLanguage().equals("en") || locale.getLanguage().equals("fr")) &&
-                        mTts.isLanguageAvailable(locale) > 0) { // ie LANG_COUNTRY_AVAILABLE or LANG_COUNTRY_VAR_AVAILABLE
+                    // PMPA-680: Filter out just English and French since our app doesn't support
+                    // anything else at this time.
+                    if ((locale.getLanguage().equals("en") || locale.getLanguage().equals("fr"))
+                            && mTts.isLanguageAvailable(locale) > 0) { // ie LANG_COUNTRY_AVAILABLE or
+                                                                       // LANG_COUNTRY_VAR_AVAILABLE
                         voice = new JSONObject();
-                        voice.put("voiceURI", locale.getLanguage()+"-"+locale.getCountry());
+                        voice.put("voiceURI", locale.getLanguage() + "-" + locale.getCountry());
                         voice.put("name", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
-                        voice.put("lang", locale.getLanguage()+"-"+locale.getCountry());
+                        voice.put("lang", locale.getLanguage() + "-" + locale.getCountry());
                         voice.put("localService", true);
                         voice.put("default", false);
                         voices.put(voice);
@@ -240,8 +237,8 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
         Log.d(LOG_TAG, "fire event: " + type);
 
         try {
-            event.put("type",type);
-            if(type.equals("start")) {
+            event.put("type", type);
+            if (type.equals("start")) {
                 event.put("charIndex", 0);
                 event.put("elapsedTime", 0);
                 event.put("name", "");
@@ -250,13 +247,13 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
             // this should never happen
         }
         PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-        if(type.equals("end")) {
+        if (type.equals("end")) {
             pr.setKeepCallback(false);
         } else {
             pr.setKeepCallback(true);
         }
 
-        if(callbackContext == null) {
+        if (callbackContext == null) {
             this.callbackContext.sendPluginResult(pr);
         } else {
             callbackContext.sendPluginResult(pr);
@@ -267,16 +264,16 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
         JSONObject error = new JSONObject();
         Log.d(LOG_TAG, "fire event: error!");
         try {
-            error.put("type","error");
-            error.put("charIndex",0);
-            error.put("elapsedTime",0);
-            error.put("name","");
+            error.put("type", "error");
+            error.put("charIndex", 0);
+            error.put("elapsedTime", 0);
+            error.put("name", "");
             error.put("error", errCode);
             error.put("message", message);
         } catch (JSONException e) {
             // this should never happen
         }
-        if(callbackContext == null) {
+        if (callbackContext == null) {
             this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error));
         } else {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error));
@@ -289,7 +286,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
      * @return
      */
     private boolean isReady() {
-        return (state == SpeechSynthesis.STARTED) ? true : false;
+        return (state == SpeechSynthesis.STARTED);
     }
 
     /**
@@ -310,7 +307,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
 
                     // No longer need the CallbackContext for this utterance.
                     contextMap.remove(utteranceId);
-                    if(utteranceId.equals(contextQueue.peek())) {
+                    if (utteranceId.equals(contextQueue.peek())) {
                         contextQueue.poll();
                     }
                 }
@@ -327,57 +324,57 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
 
                     Log.d(LOG_TAG, utteranceId + ": got utterance error");
 
-                    switch(errorCode) {
-                        case TextToSpeech.ERROR:
-                            error = 6;
-                            message = "Generic operation failure.";
-                            break;
+                    switch (errorCode) {
+                    case TextToSpeech.ERROR:
+                        error = 6;
+                        message = "Generic operation failure.";
+                        break;
 
-                        case TextToSpeech.ERROR_INVALID_REQUEST:
-                            error = 6;
-                            message = "Invalid request.";
-                            break;
+                    case TextToSpeech.ERROR_INVALID_REQUEST:
+                        error = 6;
+                        message = "Invalid request.";
+                        break;
 
-                        case TextToSpeech.ERROR_NETWORK:
-                            error = 4;
-                            message = "Network connectivity problem.";
-                            break;
+                    case TextToSpeech.ERROR_NETWORK:
+                        error = 4;
+                        message = "Network connectivity problem.";
+                        break;
 
-                        case TextToSpeech.ERROR_NETWORK_TIMEOUT:
-                            error = 4;
-                            message = "Network timeout.";
-                            break;
+                    case TextToSpeech.ERROR_NETWORK_TIMEOUT:
+                        error = 4;
+                        message = "Network timeout.";
+                        break;
 
-                        case TextToSpeech.ERROR_NOT_INSTALLED_YET:
-                            error = 5;
-                            message = "Unfinished download of the voice data.";
-                            break;
+                    case TextToSpeech.ERROR_NOT_INSTALLED_YET:
+                        error = 5;
+                        message = "Unfinished download of the voice data.";
+                        break;
 
-                        case TextToSpeech.ERROR_OUTPUT:
-                            error = 3;
-                            message = "Audio output issue.";
-                            break;
+                    case TextToSpeech.ERROR_OUTPUT:
+                        error = 3;
+                        message = "Audio output issue.";
+                        break;
 
-                        case TextToSpeech.ERROR_SERVICE:
-                            error = 6;
-                            message = "Text-To-Speech failure.";
-                            break;
+                    case TextToSpeech.ERROR_SERVICE:
+                        error = 6;
+                        message = "Text-To-Speech failure.";
+                        break;
 
-                        case TextToSpeech.ERROR_SYNTHESIS:
-                            error = 6;
-                            message = "Unable to synthesize the text.";
-                            break;
+                    case TextToSpeech.ERROR_SYNTHESIS:
+                        error = 6;
+                        message = "Unable to synthesize the text.";
+                        break;
 
-                        default:
-                            error = 6;
-                            message = "Unknown error.";
-                            break;
+                    default:
+                        error = 6;
+                        message = "Unknown error.";
+                        break;
                     }
                     fireErrorEvent(contextMap.get(utteranceId), error, message);
 
                     // No longer need the CallbackContext for this utterance.
                     contextMap.remove(utteranceId);
-                    if(utteranceId.equals(contextQueue.peek())) {
+                    if (utteranceId.equals(contextQueue.peek())) {
                         contextQueue.poll();
                     }
                 }
@@ -387,10 +384,10 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
                     String id;
 
                     Log.d(LOG_TAG, utteranceId + ": started talking");
-                    fireEvent(contextMap.get(utteranceId),"start");
+                    fireEvent(contextMap.get(utteranceId), "start");
 
                     // Any contexts that have not been processed should be flagged with an error.
-                    while(((id = contextQueue.peek()) != null) && !utteranceId.equals(id)) {
+                    while (((id = contextQueue.peek()) != null) && !utteranceId.equals(id)) {
                         fireErrorEvent(contextMap.get(id), 6, "Lost event.");
                         contextMap.remove(id);
                         contextQueue.poll();
