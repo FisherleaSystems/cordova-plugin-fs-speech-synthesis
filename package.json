@@ -2,19 +2,19 @@
   "name": "@fisherleasystems/cordova-plugin-fs-speech-synthesis",
   "version": "0.3.2",
   "description": "W3C Web Speech API - Speech synthesis plugin for Cordova",
-  "homepage": "https://github.com/FisherleaSystems/SpeechSynthesisPlugin#readme",
+  "homepage": "https://github.com/FisherleaSystems/cordova-plugin-fs-speech-synthesis#readme",
   "scripts": {
     "test": "jasmine-node --color spec"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FisherleaSystems/SpeechSynthesisPlugin.git"
+    "url": "git+https://github.com/FisherleaSystems/cordova-plugin-fs-speech-synthesis.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/FisherleaSystems"
   },
   "bugs": {
-    "url": "https://github.com/FisherleaSystems/SpeechSynthesisPlugin/issues"
+    "url": "https://github.com/FisherleaSystems/cordova-plugin-fs-speech-synthesis/issues"
   },
   "cordova": {
     "id": "cordova-plugin-fs-speech-synthesis",

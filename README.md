@@ -20,7 +20,7 @@ Then, using the command line tools run:
 
 Or, to install directly from the GitHub repository, run the following:
 
-    cordova plugin add https://github.com/FisherleaSystems/SpeechSynthesisPlugin
+    cordova plugin add https://github.com/FisherleaSystems/cordova-plugin-fs-speech-synthesis
 
 # Cordova Usage
 
