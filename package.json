@@ -4,7 +4,7 @@
   "description": "W3C Web Speech API - Speech synthesis plugin for Cordova",
   "homepage": "https://github.com/FisherleaSystems/cordova-plugin-fs-speech-synthesis#readme",
   "scripts": {
-    "test": "jasmine-node --color spec"
+    "test": "echo \"No tests to run.\""
   },
   "repository": {
     "type": "git",
@@ -37,10 +37,5 @@
   "contributors": [
     "Wayne Fisher <wayne@fisherlea.com>"
   ],
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
-    "jasmine-node": "^3.0.0",
-    "pluginpub": "0.0.9"
-  }
+  "license": "MIT"
 }

@@ -5,7 +5,7 @@ We love pull requests from everyone.
 [Fork](https://help.github.com/articles/fork-a-repo/), then [clone](https://help.github.com/articles/cloning-a-repository/) the repo:
 
 ```
-git clone git@github.com:your-username/SpeechSynthesisPlugin.git
+git clone git@github.com:your-username/cordova-plugin-fs-speech-synthesis.git
 ```
 
 Set up a branch for your feature or bugfix with a link to the original repo:
@@ -13,7 +13,7 @@ Set up a branch for your feature or bugfix with a link to the original repo:
 ```
 git checkout -b my-awesome-new-feature
 git push --set-upstream origin my-awesome-new-feature
-git remote add upstream https://github.com/macdonst/SpeechSynthesisPlugin.git
+git remote add upstream https://github.com/FisherleaSystems/cordova-plugin-fs-speech-synthesis.git
 ```
 
 Set up the project:
@@ -59,11 +59,10 @@ At this point you're waiting on us. We do our best to keep on top of all the pul
 
 Some things that will increase the chance that your pull request is accepted:
 
-- Write tests.
-- Write a [good commit message](http://chris.beams.io/posts/git-commit/).
-- Make sure the PR merges cleanly with the latest master.
-- Describe your feature/bugfix and why it's needed/important in the pull request description.
-
+-   Write tests.
+-   Write a [good commit message](http://chris.beams.io/posts/git-commit/).
+-   Make sure the PR merges cleanly with the latest master.
+-   Describe your feature/bugfix and why it's needed/important in the pull request description.
 
 ## Editor Config
 

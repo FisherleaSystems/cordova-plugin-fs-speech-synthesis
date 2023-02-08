@@ -13,11 +13,12 @@
 #### Cordova CLI version and cordova platform version
 
     cordova --version                                    # e.g. 6.0.0
-    cordova platform version android                     # e.g. 4.1.1
+    cordova platform version android                     # e.g. 10.0.1
+    cordova platform version ios                         # e.g. 6.1.0
 
 #### Plugin version
 
-    cordova plugin version | grep phonegap-plugin-speech-synthesis    # e.g. 1.5.3
+    cordova plugin version | grep cordova-plugin-fs-speech-synthesis    # e.g. 1.0.1
 
 #### Sample Push Data Payload
 
