@@ -6,13 +6,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Locale;
 import java.util.Set;
 
-import java.lang.IllegalArgumentException;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -37,8 +34,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
     private Hashtable<String, CallbackContext> contextMap = new Hashtable<String, CallbackContext>();
     private ConcurrentLinkedQueue<String> contextQueue = new ConcurrentLinkedQueue<String>();
     private Set<Voice> voiceList = null;
-
-    private int androidAPILevel = android.os.Build.VERSION.SDK_INT;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
@@ -137,7 +132,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
                 voiceCode = voice.optString("voiceURI", null);
             }
         }
-        if (voiceCode != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (voiceCode != null) {
             for (Voice v : this.voiceList) {
                 if (voiceCode.equals(v.getName())) {
                     mTts.setVoice(v);
@@ -157,17 +152,10 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
 
         if (isReady()) {
             Log.d(LOG_TAG, "utterance id: " + callbackContext.getCallbackId() + ", text: " + text);
-            if (androidAPILevel < 21) {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, callbackContext.getCallbackId());
-                map.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, Float.toString(volume));
-                mTts.speak(text, flush ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, map);
-            } else { // android API level is 21 or higher...
-                Bundle params = new Bundle();
-                params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume);
-                mTts.speak(text, flush ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, params,
-                        callbackContext.getCallbackId());
-            }
+            Bundle params = new Bundle();
+            params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume);
+            mTts.speak(text, flush ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, params,
+                    callbackContext.getCallbackId());
         } else {
             fireErrorEvent(callbackContext, 6, "Not ready.");
         }
@@ -177,55 +165,37 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener {
         JSONArray voices = new JSONArray();
         JSONObject voice;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            this.voiceList = mTts.getVoices();
-            for (Voice v : this.voiceList) {
-                Locale locale = v.getLocale();
-                voice = new JSONObject();
-                try {
-                    voice.put("voiceURI", v.getName());
-                    voice.put("name", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
-                    // voice.put("features", v.getFeatures());
-                    // voice.put("displayName", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
-                    voice.put("lang", locale.getLanguage() + "-" + locale.getCountry());
-                    voice.put("localService", !v.isNetworkConnectionRequired());
-                    voice.put("quality", v.getQuality());
-                    voice.put("default", false);
-                } catch (JSONException e) {
-                    // should never happen
-                }
-                voices.put(voice);
-            }
-        } else {
-            Locale[] list = Locale.getAvailableLocales();
-            Locale locale;
-            for (int i = 0; i < list.length; i++) {
-                locale = list[i];
-                try {
-                    // PMPA-680: Filter out just English and French since our app doesn't support
-                    // anything else at this time.
-                    if ((locale.getLanguage().equals("en") || locale.getLanguage().equals("fr"))
-                            && mTts.isLanguageAvailable(locale) > 0) { // ie LANG_COUNTRY_AVAILABLE or
-                                                                       // LANG_COUNTRY_VAR_AVAILABLE
-                        voice = new JSONObject();
-                        voice.put("voiceURI", locale.getLanguage() + "-" + locale.getCountry());
-                        voice.put("name", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
-                        voice.put("lang", locale.getLanguage() + "-" + locale.getCountry());
-                        voice.put("localService", true);
-                        voice.put("default", false);
-                        voices.put(voice);
+        this.voiceList = mTts.getVoices();
+        for (Voice v : this.voiceList) {
+            Locale locale = v.getLocale();
+            voice = new JSONObject();
+            try {
+                String name = locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale);
+                Set<String> features = v.getFeatures();
+                for(String item: features)
+                {
+                    if(item.contains("gender=female")) {
+                        name = name.concat(" Female" );
                     }
-                } catch (JSONException e) {
-                    // should never happen
-                } catch (IllegalArgumentException e) {
-                    // PMPA-680: See some exceptions here from some Android variants.
-                    Log.d(LOG_TAG, "Caught IllegalArgumentException for locale " + locale + " - " + e);
-                } catch (Exception e) {
-                    // PMPA-680: See some exceptions here from some Android variants.
-                    Log.d(LOG_TAG, "Caught Exception for locale " + locale + " - " + e);
+                    else if(item.contains("gender=male")) {
+                        name = name.concat(" Male" );
+                    }
                 }
+
+                voice.put("voiceURI", v.getName());
+                voice.put("name", name);
+                // voice.put("features", v.getFeatures());
+                // voice.put("displayName", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
+                voice.put("lang", locale.getLanguage() + "-" + locale.getCountry());
+                voice.put("localService", !v.isNetworkConnectionRequired());
+                voice.put("quality", v.getQuality());
+                voice.put("default", false);
+            } catch (JSONException e) {
+                // should never happen
             }
+            voices.put(voice);
         }
+
         PluginResult result = new PluginResult(PluginResult.Status.OK, voices);
         result.setKeepCallback(false);
         startupCallbackContext.sendPluginResult(result);
