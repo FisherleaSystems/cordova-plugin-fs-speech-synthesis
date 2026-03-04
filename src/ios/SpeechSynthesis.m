@@ -1,6 +1,6 @@
 /*
     Modified for use in the Speech Synthesis plugin by Wayne Fisher.
-    Copyright (c) 2019 Fisherlea Systems.
+    Copyright (c) 2019-2026 Fisherlea Systems.
 
     Original code from:
     Cordova Text-to-Speech Plugin
@@ -55,18 +55,24 @@
         NSLog(@"[ss] AVAudioSessionRouteChangeReasonNewDeviceAvailable");
         
         route = audioSession.currentRoute;
-        port = route.inputs[0];
-        NSLog(@"[ss] New device is %@", port.portType);
+        if([route.inputs count] > 0) {
+            port = route.inputs[0];
+            NSLog(@"[ss] New device is %@", port.portType);
+        }
     } else if ([reason unsignedIntegerValue] == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
         NSLog(@"[ss] AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
         
         route = [notification.userInfo objectForKey:AVAudioSessionRouteChangePreviousRouteKey];
-        port = route.inputs[0];
-        NSLog(@"[ss] Removed device %@", port.portType);
+        if([route.inputs count] > 0) {
+            port = route.inputs[0];
+            NSLog(@"[ss] Removed device %@", port.portType);
+        }
         
         route = audioSession.currentRoute;
-        port = route.inputs[0];
-        NSLog(@"[ss] Now using device %@", port.portType);
+        if([route.inputs count] > 0) {
+            port = route.inputs[0];
+            NSLog(@"[ss] Now using device %@", port.portType);
+        }
     } else if ([reason unsignedIntegerValue] == AVAudioSessionRouteChangeReasonCategoryChange) {
         NSLog(@"[ss] AVAudioSessionRouteChangeReasonCategoryChange");
 
